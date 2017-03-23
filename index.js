@@ -26,16 +26,13 @@ class MailService {
         this.config = {
             services: {
                 mailgun: {
-                    enable: true,
                     apiKey: '',
                     domain: '',
                 },
                 sendgrid: {
-                    enable: true,
                     apiKey: ''
                 },
                 mandrill: {
-                    enable: true,
                     apiKey: ''
                 }
             },
@@ -56,8 +53,8 @@ class MailService {
             value = value.toLowerCase();
             $config.servicesFailoverOrder[index] = value;
 
-            if (!$config.services[value] || true !== $config.services[value].enable){
-                throw new Error(`Provided vendor ${value} is not supported or is not enabled in config`);
+            if (!$config.services[value]){
+                throw new Error(`Provided vendor ${value} is not supported`);
             }
         });
 

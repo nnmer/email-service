@@ -23,16 +23,13 @@ MailService will return a Promise.
 let sendService = new MailService({
     services: {
         mailgun: {
-            enable: true,
             apiKey: 'mailgun-apiKey',
             domain: 'mailgun-domain',
         },
         sendgrid: {
-            enable: true,
             apiKey: 'sendgrid-apiKey'
         },
         mandrill: {
-            enable: true,
             apiKey: 'sendgrid-apiKey'
         },
         servicesFailoverOrder: {
@@ -49,6 +46,32 @@ sendService.send(fromEmail, toEmail, subject, content)
     .then(...)
     .catch(...)
 
+```
+
+
+Full config is :
+
+```
+{
+    services: {
+        mailgun: {
+            apiKey: '',
+            domain: '',
+        },
+        sendgrid: {
+            apiKey: ''
+        },
+        mandrill: {
+            apiKey: ''
+        }
+    },
+    servicesFailoverOrder: [
+        'mailgun',
+        'mandrill',
+        'sendgrid'
+    ],
+    retryTimes:     3,
+}
 ```
 
 Testing

@@ -1,0 +1,31 @@
+{
+  "name": "email-service",
+  "version": "0.1.0",
+  "description": "Sending emails through 3rd party email services with failover",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "send email",
+    "sendmail",
+    "email",
+    "mailgun",
+    "mandrill",
+    "sendgrid"
+  ],
+  "author": {
+    "name": "Anton Romanov",
+    "email": "anton.v.romanov@gmail.com"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "mailgun-js": "^0.9.0",
+    "mandrill-api": "^1.0.45",
+    "sendgrid": "^4.8.4",
+    "validate.js": "^0.11.1"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0"
+  }
+}

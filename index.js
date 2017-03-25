@@ -11,6 +11,11 @@ String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
+var servicesInstances = {
+    serviceMailgun,
+    serviceMandrill,
+    serviceSendgrid
+};
 
 class MailService {
 
@@ -74,23 +79,36 @@ class MailService {
         }
     }
 
-    sendViaService(serviceName){
-        var Service = new this[`service${serviceName.capitalizeFirstLetter()}`](this.config.services[serviceName]);
+    /**
+     *
+     * @param serviceName
+     * @param data
+     * @returns {Promise}
+     */
+    sendViaService(serviceName, data){
 
         return new Promise((resolve,reject)=>{
-            Service.send(from, to, subject, content)
-                .then(resolve)
-                .catch(reject);
+            console.log(`Sending via ${serviceName}...`);
+            let serviceToCall = `service${serviceName.capitalizeFirstLetter()}`;
+            var Service =  new servicesInstances[serviceToCall](this.config.services[serviceName]);
+
+            Service.send(data.from, data.to, data.subject, data.content)
+                .then((s)=>{console.log('Emails was successfully sent');resolve(s)})
+                .catch((e)=>{
+                    console.log(`Fail to send via ${serviceName}`);
+                    reject(e)
+                });
         });
     }
 
     /**
      * Send a email through the send mail service
      *
-     * @param to            Email address to deliver mail
-     * @param subject       Subject for email
-     * @param content       Content of the email
-     * @returns {boolean}
+     * @param from
+     * @param to
+     * @param subject
+     * @param content
+     * @returns {Promise}
      */
     send(from, to, subject, content) {
 
@@ -98,16 +116,17 @@ class MailService {
         var retryTimesIndex = 1;
         var serviceIndex    = 0;
 
-        this.validateSendData({
-            from: from,
-            to:   to,
+        var data = {
+            from:    from,
+            to:      to,
             subject: subject,
             content: content
-        });
+        };
+        this.validateSendData(data);
 
         return new Promise((resolve,reject)=>{
             const failOverHandler = (e)=>{
-                console.log(`Failover:: serviceIndex: ${serviceIndex}, retryTimesIndex: ${retryTimesIndex}, error:e.message`);
+                console.log(`Failover:: serviceIndex: ${serviceIndex}, retryTimesIndex: ${retryTimesIndex}, error: ${e.message}`);
 
                 ++serviceIndex;
                 if (serviceIndex > (this.config.servicesFailoverOrder.length-1) ){
@@ -116,15 +135,14 @@ class MailService {
                 }
                 if (retryTimesIndex > $config.retryTimes){
                     let message = 'The message was not sent, all the send mail services are unavailable';
-                    console.log(message);
-                    reject(message)
+                    reject(message);
                 }
-                this.sendViaService(this.config.servicesFailoverOrder[serviceIndex])
+                this.sendViaService(this.config.servicesFailoverOrder[serviceIndex], data)
                     .then(resolve)
                     .catch(failOverHandler)
-            }
+            };
 
-            this.sendViaService(this.config.servicesFailoverOrder[serviceIndex])
+            this.sendViaService(this.config.servicesFailoverOrder[serviceIndex], data)
                 .then(resolve)
                 .catch(failOverHandler)
         });

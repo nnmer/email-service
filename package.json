@@ -1,7 +1,10 @@
 {
   "name": "email-service",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Sending emails through 3rd party email services with failover",
+  "repository": {
+    "url": "https://github.com/nnmer/email-service"
+  },
   "main": "index.js",
   "scripts": {
     "test": "mocha"
@@ -14,11 +17,8 @@
     "mandrill",
     "sendgrid"
   ],
-  "author": {
-    "name": "Anton Romanov",
-    "email": "anton.v.romanov@gmail.com"
-  },
-  "license": "ISC",
+  "author": "Anton Romanov <anton.v.romanov@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "mailgun-js": "^0.9.0",
     "mandrill-api": "^1.0.45",

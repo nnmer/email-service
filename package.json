@@ -1,6 +1,6 @@
 {
   "name": "email-service",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Sending emails through 3rd party email services with failover",
   "repository": {
     "url": "https://github.com/nnmer/email-service"

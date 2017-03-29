@@ -24,8 +24,8 @@ class MailService {
 
         this.supportedVendors = [
             'mailgun',
-            'mandrill',
-            'sendgrid'
+            'sendgrid',
+            'mandrill'
         ];
 
         this.config = {

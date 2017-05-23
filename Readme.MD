@@ -74,6 +74,8 @@ Full config is :
 }
 ```
 
+Services failover is following the round robin idea.
+
 Testing
 -------
 
